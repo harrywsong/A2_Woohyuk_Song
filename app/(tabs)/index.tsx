@@ -3,6 +3,8 @@ import { useState } from 'react';
 
 export default function HomeScreen() {
 
+  // state variables
+  
   // base input currency should be CAD
   const [baseCurrency, setBaseCurrency] = useState('CAD');
   // base output currency should be USD
