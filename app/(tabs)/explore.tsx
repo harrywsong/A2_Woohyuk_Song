@@ -33,6 +33,10 @@ export default function TabTwoScreen() {
       <ThemedText>Name: Woohyuk (Harry) Song</ThemedText>
       <ThemedText>Student ID: 101524575</ThemedText>
       <ThemedText>Course: COMP3074</ThemedText>
+      <ThemedText>Description: This is a currency converter app. 
+        It allows users to convert money from one currency to another using real-time exchange rates. 
+        You can enter a base currency (like CAD), a destination currency (like USD), and an amount. 
+        The app will fetch the current exchange rate and calculate the converted amount.</ThemedText>
     </ParallaxScrollView>
   );
 }
