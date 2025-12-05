@@ -74,6 +74,12 @@ export default function HomeScreen() {
 
     setLoading(true);
     setShowResult(false);
+
+    // build the API URL with the base currency, destination currency, and amount
+    const base = baseCurrency.toUpperCase();
+    const dest = destCurrency.toUpperCase();
+    const url = `${API_BASE_URL}?apikey=${API_KEY}&base_currency=${base}&currencies=${dest}`;
+
   };
 
   return (
