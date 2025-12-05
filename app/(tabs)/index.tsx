@@ -36,6 +36,7 @@ export default function HomeScreen() {
         onChangeText={setBaseCurrency}
         placeholder="CAD"
         autoCapitalize="characters"
+        maxLength={3}
       />
 
       <Text style={styles.label}>Destination Currency (e.g., USD):</Text>
@@ -45,6 +46,7 @@ export default function HomeScreen() {
         onChangeText={setDestCurrency}
         placeholder="USD"
         autoCapitalize="characters"
+        maxLength={3}
       />
 
       <Text style={styles.label}>Amount:</Text>
