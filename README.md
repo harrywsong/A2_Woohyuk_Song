@@ -1,50 +1,57 @@
-# Welcome to your Expo app 👋
+# COMP3074 - Assignment 2
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+- **Name:** Woohyuk (Harry) Song
+- **Student ID:** 101524575
 
-## Get started
+## Description
+This is a currency converter app. 
+It allows users to convert money from one currency to another using real-time exchange rates. 
+You can enter a base currency (like CAD), a destination currency (like USD), and an amount. 
+The app will fetch the current exchange rate and calculate the converted amount.
 
-1. Install dependencies
+## Technologies Used
+- React Native
+- Expo
+- TypeScript
+- FreeCurrencyAPI
 
-   ```bash
-   npm install
-   ```
+## Installation
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Clone the repository:
 ```bash
-npm run reset-project
+git clone [your-github-repo-url]
+cd A2_Woohyuk_Song
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies:
+```bash
+npm install
+```
 
-## Learn more
+3. Start the app:
+```bash
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+4. Run on your preferred platform (for the purposes of our assignment, this would be Android)
+   - Press `a` for Android emulator
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Usage
 
-## Join the community
+1. **Home Screen:**
+   - Enter a 3-letter base currency code (e.g., CAD)
+   - Enter a 3-letter destination currency code (e.g., USD)
+   - Enter the amount you want to convert
+   - Press "Convert" to see the results
+   - View currency codes by tapping the blue link (brings you to an online browser page)
 
-Join our community of developers creating universal apps.
+2. **About Screen:**
+   - Tap the "About" tab to view author information and app description
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Input Requirements
+- Currency codes must be 3 letters (e.g., CAD, USD, EUR)
+- Amount must be a positive number
+- Base and destination currencies must be different
+
+## API
+This app uses the [FreeCurrencyAPI](https://freecurrencyapi.com/) for real-time exchange rates.
