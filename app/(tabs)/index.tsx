@@ -68,6 +68,16 @@ export default function HomeScreen() {
       return false;
     }
 
+    // considering we already have validation system so inputs are already uppercase, these two should never really be triggered, but just in case we will keep them
+    if (baseCurrency !== baseCurrency.toUpperCase()) {
+      Alert.alert('Error', 'Base currency must be uppercase letters');
+      return false;
+    }
+    if (destCurrency !== destCurrency.toUpperCase()) {
+      Alert.alert('Error', 'Destination currency must be uppercase letters');
+      return false;
+    }
+
     // if all inputs are valid, return true
     return true;
   };
