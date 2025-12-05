@@ -68,6 +68,23 @@ export default function HomeScreen() {
       return false;
     }
 
+    // check if base currency contain only letters
+    if (!/^[A-Za-z]+$/.test(baseCurrency)) {
+      Alert.alert('Error', 'Base currency must contain only letters');
+      return false;
+    }
+    // check if destination currency contains only letters
+    if (!/^[A-Za-z]+$/.test(destCurrency)) {
+      Alert.alert('Error', 'Destination currency must contain only letters');
+      return false;
+    }
+
+    // check for unreasonably large inputs
+    if (Number(amount) > 1000000000) {
+      Alert.alert('Error', 'Amount must be less than 1,000,000,000');
+      return false;
+    }
+
     // considering we already have validation system so inputs are already uppercase, these two should never really be triggered, but just in case we will keep them
     if (baseCurrency !== baseCurrency.toUpperCase()) {
       Alert.alert('Error', 'Base currency must be uppercase letters');
@@ -102,12 +119,38 @@ export default function HomeScreen() {
 
       // for making the API request
       const response = await fetch(url);
+
+      // check if response status is not OK. if not, show correct error message based on status code
+      if (!response.ok) {
+        if (response.status === 401) {
+          Alert.alert('Error', 'API key is invalid or expired');
+        } else if (response.status === 429) {
+          Alert.alert('Error', 'Too many requests. Please try again later.');
+        } else if (response.status >= 500) {
+          Alert.alert('Error', 'Server error. Please try again later.');
+        } else {
+          Alert.alert('Error', `Request failed with status: ${response.status}`);
+        }
+        setLoading(false);
+        return;
+      }
+
       const data = await response.json();
+
+      // check for API-specific errors
+      if (data.error) {
+        Alert.alert('Error', data.error.message || 'An error occurred with the API');
+        setLoading(false);
+        return;
+      }
 
       // checking if response has valid data
       if (!data.data || !data.data[dest]) {
-        // if not, show error message
-        Alert.alert('Error', 'Invalid currency code');
+        // if not, show error message with more specific info
+        Alert.alert(
+          'Invalid Currency', 
+          `Currency code "${dest}" is not supported or invalid. Please check and try again.`
+        );
         // set loading state to false and return
         setLoading(false);
         return;
@@ -116,11 +159,18 @@ export default function HomeScreen() {
       // Get exchange rate from the response
       const rate = data.data[dest];
 
+      // validate that rate is a valid number
+      if (typeof rate !== 'number' || isNaN(rate) || rate <= 0) {
+        Alert.alert('Error', 'Received invalid exchange rate from API');
+        setLoading(false);
+        return;
+      }
+
       // Calculate converted amount, rounding to 2 decimal places
       const converted = (Number(amount) * rate).toFixed(2);
 
-      // update exchange rate
-      setExchangeRate(rate);
+      // update exchange rate with 10 decimal places max
+      setExchangeRate(rate.toFixed(10));
       // update converted amount
       setConvertedAmount(converted);
       // update show result state to true
