@@ -28,6 +28,33 @@ export default function HomeScreen() {
     }
   };
 
+  const validateInputs = () => {
+    if (!baseCurrency || !destCurrency) {
+      Alert.alert('Error', 'Please enter both base and destination currencies');
+      return false;
+    }
+
+    if (!amount || parseFloat(amount) <= 0) {
+      Alert.alert('Error', 'Please enter a valid amount');
+      return false;
+    }
+    if (baseCurrency.toUpperCase() === destCurrency.toUpperCase()) {
+      Alert.alert('Error', 'Base and destination currencies cannot be the same');
+      return false;
+    }
+
+    if (destCurrency.length !== 3) {
+      Alert.alert('Error', 'Destination currency must be 3 characters');
+      return false;
+    }
+
+    if (baseCurrency.length !== 3) {
+      Alert.alert('Error', 'Base currency must be 3 characters');
+      return false;
+    }
+    return true;
+  };
+
   // TODO: add validation, add error handling
   // TODO: add conversion logic
   // TODO: add currency conversion API: fca_live_VJzqecwLsUGYkgAMQMxSlfQUFOnKpsBGst1qsUDU
