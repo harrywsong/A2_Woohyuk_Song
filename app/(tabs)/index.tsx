@@ -142,8 +142,8 @@ export default function HomeScreen() {
       // Get exchange rate from the response
       const rate = data.data[dest];
 
-      // Calculate converted amount, rounding to 10 decimal places
-      const converted = (Number(amount) * rate).toFixed(10);
+      // Calculate converted amount, rounding to 5 decimal places
+      const converted = (Number(amount) * rate).toFixed(5);
 
       // update exchange rate with 10 decimal places max
       setExchangeRate(rate.toFixed(10));
