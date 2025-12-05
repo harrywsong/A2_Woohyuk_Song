@@ -67,8 +67,14 @@ export default function HomeScreen() {
     return true;
   };
 
-  // TODO: add validation, add error handling
-  // TODO: add conversion logic
+  const convertCurrency = async () => {
+    if (!validateInputs()) {
+      return;
+    }
+
+    setLoading(true);
+    setShowResult(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -111,8 +117,7 @@ export default function HomeScreen() {
         ) : (
           <Button 
           title="Convert" 
-          // to be implemented later to start the conversion process when user clicks the button
-          // onPress={convertCurrency} 
+          onPress={convertCurrency} 
           disabled={loading} />
         )}
       </View>
