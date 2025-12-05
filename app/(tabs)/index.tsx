@@ -1,6 +1,10 @@
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useState } from 'react';
 
+// API configuration
+const API_KEY = 'fca_live_VJzqecwLsUGYkgAMQMxSlfQUFOnKpsBGst1qsUDU';
+const API_BASE_URL = 'https://api.freecurrencyapi.com/v1/latest';
+
 export default function HomeScreen() {
 
   // state variables
@@ -65,7 +69,6 @@ export default function HomeScreen() {
 
   // TODO: add validation, add error handling
   // TODO: add conversion logic
-  // TODO: add currency conversion API: fca_live_VJzqecwLsUGYkgAMQMxSlfQUFOnKpsBGst1qsUDU
 
   return (
     <View style={styles.container}>
