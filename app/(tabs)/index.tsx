@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, Linking } from 'react-native';
 import { useState } from 'react';
 
 // API configuration
@@ -24,6 +24,11 @@ export default function HomeScreen() {
   const [exchangeRate, setExchangeRate] = useState('');
   // show result state, default to false. used to display the result of the conversion
   const [showResult, setShowResult] = useState(false);
+
+  // function to open currency codes link in browser
+  const openCurrencyCodes = () => {
+    Linking.openURL('https://www.iban.com/currency-codes');
+  };
 
   const handleAmountChange = (text: string) => {
     // allow only numbers and one decimal point
@@ -67,6 +72,7 @@ export default function HomeScreen() {
     return true;
   };
 
+  // Function to convert currency
   const convertCurrency = async () => {
     // if inputs are not valid, return
     if (!validateInputs()) {
@@ -79,24 +85,54 @@ export default function HomeScreen() {
 
     // put into try catch block to handle errors
     try {
-      // build the API URL with the base currency, destination currency, and amount
+      // building API URL
       const base = baseCurrency.toUpperCase();
       const dest = destCurrency.toUpperCase();
       const url = `${API_BASE_URL}?apikey=${API_KEY}&base_currency=${base}&currencies=${dest}`;
 
-      // fetch the data from the API
+      // for making the API request
       const response = await fetch(url);
       const data = await response.json();
+
+      // checking if response has valid data
+      if (!data.data || !data.data[dest]) {
+        // if not, show error message
+        Alert.alert('Error', 'Invalid currency code');
+        // set loading state to false and return
+        setLoading(false);
+        return;
+      }
+
+      // Get exchange rate from the response
+      const rate = data.data[dest];
+
+      // Calculate converted amount, rounding to 2 decimal places
+      const converted = (Number(amount) * rate).toFixed(2);
+
+      // update exchange rate
+      setExchangeRate(rate);
+      // update converted amount
+      setConvertedAmount(converted);
+      // update show result state to true
+      setShowResult(true);
+      // set loading state to false
+      setLoading(false);
+
+      // if error occurs, show error message and set loading state to false
     } catch (error) {
       Alert.alert('Error', 'Failed to convert currency');
-      console.error('Error:', error);
+      setLoading(false);
     }
-
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Currency Converter</Text>
+
+      <Text style={styles.linkText} onPress={openCurrencyCodes}>
+        View Currency Codes (Opens in browser)
+      </Text>
+
 
       <Text style={styles.label}>Base Currency (e.g., CAD):</Text>
       <TextInput
@@ -199,5 +235,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
     color: '#666',
+  },
+  linkText: {
+    fontSize: 14,
+    color: '#007AFF',
+    textAlign: 'center',
+    marginBottom: 20,
+    textDecorationLine: 'underline',
   },
 });
