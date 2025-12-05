@@ -130,7 +130,7 @@ export default function HomeScreen() {
       <Text style={styles.title}>Currency Converter</Text>
 
       <Text style={styles.linkText} onPress={openCurrencyCodes}>
-        View Currency Codes (Opens in browser)
+        View Currency Codes (Opens in Browser)
       </Text>
 
 

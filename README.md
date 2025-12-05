@@ -19,7 +19,7 @@ The app will fetch the current exchange rate and calculate the converted amount.
 
 1. Clone the repository:
 ```bash
-git clone [your-github-repo-url]
+git clone https://github.com/harrywsong/A2_Woohyuk_Song.git
 cd A2_Woohyuk_Song
 ```
 
