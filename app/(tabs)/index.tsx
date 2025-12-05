@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Button, StyleSheet, Alert, ActivityIndicator, Linking } from 'react-native';
 import { useState } from 'react';
 
-// API configuration
+// API configuration (API key is hardcoded for the purposes of our assignment, but normally would be stored in a .env file or some other secure way)
 const API_KEY = 'fca_live_VJzqecwLsUGYkgAMQMxSlfQUFOnKpsBGst1qsUDU';
 const API_BASE_URL = 'https://api.freecurrencyapi.com/v1/latest';
 
