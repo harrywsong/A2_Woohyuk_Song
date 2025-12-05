@@ -56,42 +56,21 @@ export default function HomeScreen() {
       return false;
     }
 
-    // check if destination currency is 3 characters, if not, show error message
-    if (destCurrency.length !== 3) {
-      Alert.alert('Error', 'Destination currency must be 3 characters');
+  // check if base currency is exactly 3 letters and only letters (combined previous validation for base currency and destination currency into one regex each)
+    if (!/^[A-Za-z]{3}$/.test(baseCurrency)) {
+      Alert.alert('Error', 'Base currency must be exactly 3 letters');
       return false;
     }
 
-    // check if base currency is 3 characters, if not, show error message
-    if (baseCurrency.length !== 3) {
-      Alert.alert('Error', 'Base currency must be 3 characters');
-      return false;
-    }
-
-    // check if base currency contain only letters
-    if (!/^[A-Za-z]+$/.test(baseCurrency)) {
-      Alert.alert('Error', 'Base currency must contain only letters');
-      return false;
-    }
-    // check if destination currency contains only letters
-    if (!/^[A-Za-z]+$/.test(destCurrency)) {
-      Alert.alert('Error', 'Destination currency must contain only letters');
+    // check if destination currency is exactly 3 letters
+    if (!/^[A-Za-z]{3}$/.test(destCurrency)) {
+      Alert.alert('Error', 'Destination currency must be exactly 3 letters');
       return false;
     }
 
     // check for unreasonably large inputs
     if (Number(amount) > 1000000000) {
       Alert.alert('Error', 'Amount must be less than 1,000,000,000');
-      return false;
-    }
-
-    // considering we already have validation system so inputs are already uppercase, these two should never really be triggered, but just in case we will keep them
-    if (baseCurrency !== baseCurrency.toUpperCase()) {
-      Alert.alert('Error', 'Base currency must be uppercase letters');
-      return false;
-    }
-    if (destCurrency !== destCurrency.toUpperCase()) {
-      Alert.alert('Error', 'Destination currency must be uppercase letters');
       return false;
     }
 
@@ -128,6 +107,10 @@ export default function HomeScreen() {
           Alert.alert('Error', 'Too many requests. Please try again later.');
         } else if (response.status >= 500) {
           Alert.alert('Error', 'Server error. Please try again later.');
+        } else if (response.status === 404) {
+          Alert.alert('Error', 'Currency code not found. Please check and try again.');
+        } else if (response.status === 400) {
+          Alert.alert('Error', 'Invalid request. Please check your inputs and try again.');
         } else {
           Alert.alert('Error', `Request failed with status: ${response.status}`);
         }
@@ -144,8 +127,8 @@ export default function HomeScreen() {
         return;
       }
 
-      // checking if response has valid data
-      if (!data.data || !data.data[dest]) {
+      // checking if response has valid data and rate is valid
+      if (!data.data || !data.data[dest] || typeof data.data[dest] !== 'number' || isNaN(data.data[dest]) || data.data[dest] <= 0) {
         // if not, show error message with more specific info
         Alert.alert(
           'Invalid Currency', 
@@ -159,15 +142,8 @@ export default function HomeScreen() {
       // Get exchange rate from the response
       const rate = data.data[dest];
 
-      // validate that rate is a valid number
-      if (typeof rate !== 'number' || isNaN(rate) || rate <= 0) {
-        Alert.alert('Error', 'Received invalid exchange rate from API');
-        setLoading(false);
-        return;
-      }
-
-      // Calculate converted amount, rounding to 2 decimal places
-      const converted = (Number(amount) * rate).toFixed(2);
+      // Calculate converted amount, rounding to 10 decimal places
+      const converted = (Number(amount) * rate).toFixed(10);
 
       // update exchange rate with 10 decimal places max
       setExchangeRate(rate.toFixed(10));
@@ -180,8 +156,16 @@ export default function HomeScreen() {
 
       // if error occurs, show error message and set loading state to false
     } catch (error) {
-      Alert.alert('Error', 'Failed to convert currency');
+      // more specific error handling based on error type
+      if (error instanceof TypeError && error.message.includes('fetch')) {
+        Alert.alert('Network Error', 'Please check your internet connection and try again.');
+      } else if (error instanceof SyntaxError) {
+        Alert.alert('Error', 'Received invalid response from server.');
+      } else {
+        Alert.alert('Error', 'An unexpected error occurred. Please try again.');
+      }
       setLoading(false);
+      console.error('Conversion error:', error);
     }
   };
 
@@ -198,7 +182,12 @@ export default function HomeScreen() {
       <TextInput
         style={styles.input}
         value={baseCurrency}
-        onChangeText={setBaseCurrency}
+        onChangeText={(text) => {
+          // only allow letters
+          if (/^[A-Za-z]*$/.test(text)) {
+            setBaseCurrency(text);
+          }
+        }}
         placeholder="CAD"
         autoCapitalize="characters"
         maxLength={3}
@@ -208,7 +197,12 @@ export default function HomeScreen() {
       <TextInput
         style={styles.input}
         value={destCurrency}
-        onChangeText={setDestCurrency}
+        onChangeText={(text) => {
+          // only allow letters
+          if (/^[A-Za-z]*$/.test(text)) {
+            setDestCurrency(text);
+          }
+        }}
         placeholder="USD"
         autoCapitalize="characters"
         maxLength={3}
