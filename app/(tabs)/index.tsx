@@ -29,29 +29,37 @@ export default function HomeScreen() {
   };
 
   const validateInputs = () => {
+    // check if base and destination currencies are entered, if not, show error message
     if (!baseCurrency || !destCurrency) {
       Alert.alert('Error', 'Please enter both base and destination currencies');
       return false;
     }
 
+    // check if amount is entered and is a valid number, if not, show error message
     if (!amount || parseFloat(amount) <= 0) {
       Alert.alert('Error', 'Please enter a valid amount');
       return false;
     }
+
+    // check if base and destination currencies are the same, if so, show error message
     if (baseCurrency.toUpperCase() === destCurrency.toUpperCase()) {
       Alert.alert('Error', 'Base and destination currencies cannot be the same');
       return false;
     }
 
+    // check if destination currency is 3 characters, if not, show error message
     if (destCurrency.length !== 3) {
       Alert.alert('Error', 'Destination currency must be 3 characters');
       return false;
     }
 
+    // check if base currency is 3 characters, if not, show error message
     if (baseCurrency.length !== 3) {
       Alert.alert('Error', 'Base currency must be 3 characters');
       return false;
     }
+
+    // if all inputs are valid, return true
     return true;
   };
 
