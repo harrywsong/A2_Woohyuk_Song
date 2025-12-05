@@ -21,6 +21,13 @@ export default function HomeScreen() {
   // show result state, default to false. used to display the result of the conversion
   const [showResult, setShowResult] = useState(false);
 
+  const handleAmountChange = (text: string) => {
+    // allow only numbers and one decimal point
+    if (/^\d*\.?\d*$/.test(text)) {
+      setAmount(text);
+    }
+  };
+
   // TODO: add validation, add error handling
   // TODO: add conversion logic
   // TODO: add currency conversion API: fca_live_VJzqecwLsUGYkgAMQMxSlfQUFOnKpsBGst1qsUDU
@@ -53,8 +60,7 @@ export default function HomeScreen() {
       <TextInput
         style={styles.input}
         value={amount}
-        // to be implemented later to handle amount change by user input when user is typing
-        // onChangeText={handleAmountChange}
+        onChangeText={handleAmountChange}
         // use 1 as default value
         placeholder="1"
         // limit the input to only numbers
