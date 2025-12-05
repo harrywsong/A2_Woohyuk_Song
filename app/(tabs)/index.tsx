@@ -68,17 +68,29 @@ export default function HomeScreen() {
   };
 
   const convertCurrency = async () => {
+    // if inputs are not valid, return
     if (!validateInputs()) {
       return;
     }
 
+    // set loading state to true and show result state to false
     setLoading(true);
     setShowResult(false);
 
-    // build the API URL with the base currency, destination currency, and amount
-    const base = baseCurrency.toUpperCase();
-    const dest = destCurrency.toUpperCase();
-    const url = `${API_BASE_URL}?apikey=${API_KEY}&base_currency=${base}&currencies=${dest}`;
+    // put into try catch block to handle errors
+    try {
+      // build the API URL with the base currency, destination currency, and amount
+      const base = baseCurrency.toUpperCase();
+      const dest = destCurrency.toUpperCase();
+      const url = `${API_BASE_URL}?apikey=${API_KEY}&base_currency=${base}&currencies=${dest}`;
+
+      // fetch the data from the API
+      const response = await fetch(url);
+      const data = await response.json();
+    } catch (error) {
+      Alert.alert('Error', 'Failed to convert currency');
+      console.error('Error:', error);
+    }
 
   };
 
